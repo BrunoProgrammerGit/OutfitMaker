@@ -1,0 +1,30 @@
+{
+  "name": "OutfitMaker",
+  "short_name": "OutfitMaker",
+  "description": "Optimiza tu armario, planifica outfits y prueba combinaciones desde tu dispositivo.",
+  "lang": "es",
+  "theme_color": "#aa3bff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
