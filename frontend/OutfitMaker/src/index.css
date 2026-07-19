@@ -1,26 +1,42 @@
+/* ============================================================
+   DIGITAL NEOCLASSICAL COLLAGE — Base & Design Tokens
+   Paleta monocromática de alto contraste. Sin color cromático.
+   ============================================================ */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Paleta estricta */
+  --ink: #121212;          /* negro carbón mate (fondo base) */
+  --ink-soft: #1c1c1c;
+  --paper: #f9f6ee;        /* crema / marfil (contenedores) */
+  --paper-shade: #efe9db;
+  --paper-edge: #e4dcc8;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Escala de grises para acentos/contenido */
+  --gray-900: #1a1a1a;
+  --gray-700: #3d3d3d;
+  --gray-500: #6b6b6b;
+  --gray-400: #8a8a8a;
+  --gray-300: #b7b2a6;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  /* Semánticos */
+  --bg: var(--ink);
+  --surface: var(--paper);
+  --text: var(--gray-700);
+  --text-strong: #0a0a0a;
+  --text-on-ink: var(--paper);
+
+  /* Tipografía */
+  --script: 'Great Vibes', 'Edwardian Script ITC', cursive;
+  --sans: 'Inter', system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+  /* Trazo hand-drawn */
+  --stroke: 2.5px solid #121212;
+  --stroke-thin: 1.5px solid #121212;
+
+  color-scheme: dark;
+  font: 400 17px/1.6 var(--sans);
   color: var(--text);
   background: var(--bg);
-  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -30,24 +46,8 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -57,53 +57,131 @@ body {
 #root {
   width: 100%;
   min-height: 100svh;
-  box-sizing: border-box;
+  position: relative;
+  isolation: isolate;
 }
 
-* {
-  box-sizing: border-box;
+/* ------------------------------------------------------------
+   CAPA 1 — Fondo negro mate + textura de papel/ruido sutil
+   ------------------------------------------------------------ */
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--ink);
+  /* Ruido digital de baja opacidad (~3%) */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
 }
 
+/* ------------------------------------------------------------
+   Tipografía global
+   ------------------------------------------------------------ */
 h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+h2,
+h3 {
+  color: var(--text-strong);
+  margin: 0;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+/* Títulos caligráficos, expresivos */
+.script {
+  font-family: var(--script);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.5px;
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+
+/* Subtítulos con subrayado irregular */
+.section-label {
+  font-family: var(--sans);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 13px;
+  color: var(--text-strong);
+  display: inline-block;
+  position: relative;
 }
+.section-label::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -4px;
+  bottom: -3px;
+  height: 4px;
+  background: #121212;
+  clip-path: polygon(
+    0 60%, 8% 30%, 18% 70%, 30% 40%, 42% 75%, 55% 35%,
+    68% 70%, 80% 40%, 92% 72%, 100% 45%, 100% 100%, 0 100%
+  );
+}
+
 p {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
+/* Cápsula de autor / tag / metadato */
+.author-pill {
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  align-items: center;
+  gap: 6px;
+  background: var(--ink);
+  color: var(--text-on-ink);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  padding: 4px 12px;
+  border-radius: 50px;
+  line-height: 1.4;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Recorte de arte clásico troquelado: B/N contraste extremo */
+.artwork-cutout {
+  filter: grayscale(1) contrast(1.35) brightness(1.02);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ------------------------------------------------------------
+   Botones hand-drawn (globales)
+   ------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 26px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--text-strong);
+  border: var(--stroke-thin);
+  border-radius: 9px 6px 10px 7px / 7px 10px 6px 9px;
+  transition: transform 0.12s ease, background 0.15s, color 0.15s;
+}
+.btn:active {
+  transform: translate(1px, 1px);
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 3px 3px 0 -1px rgba(18, 18, 18, 0.9);
+}
+.btn-primary:hover {
+  background: var(--ink-soft);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-strong);
+}
+.btn-secondary:hover {
+  background: var(--ink);
+  color: var(--paper);
 }

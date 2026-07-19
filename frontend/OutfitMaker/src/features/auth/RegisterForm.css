@@ -1,0 +1,141 @@
+.register-page {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  padding: 64px 24px 96px;
+}
+
+.register-window {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  z-index: 2;
+}
+
+/* Arte troquelado que rompe el marco de la ventana */
+.register-statue {
+  position: absolute;
+  top: -46px;
+  right: calc(50% - 300px);
+  width: 170px;
+  z-index: 1;
+  opacity: 0.95;
+  filter: drop-shadow(6px 10px 14px rgba(0, 0, 0, 0.5));
+  pointer-events: none;
+}
+.register-statue svg {
+  width: 100%;
+  height: auto;
+}
+
+.register-title {
+  font-size: 46px;
+  color: var(--text-strong);
+  margin: 10px 0 2px;
+}
+
+.register-sub {
+  font-size: 14px;
+  color: var(--gray-700);
+  margin: 0 0 26px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.register-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.register-label {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-strong);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.register-input {
+  padding: 11px 14px;
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--text-strong);
+  background: #fffdf8;
+  border: var(--stroke-thin);
+  border-radius: 8px 6px 9px 5px / 6px 9px 5px 8px;
+  outline: none;
+  transition: box-shadow 0.15s;
+  width: 100%;
+}
+.register-input:focus {
+  box-shadow: 2px 2px 0 -0.5px rgba(18, 18, 18, 0.85);
+}
+
+.register-field--error .register-input {
+  border-color: #121212;
+  background: #f0ece2;
+}
+
+.register-field-error {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: #121212;
+  line-height: 1.4;
+}
+
+.register-error-global {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 10px 14px;
+  border-radius: 8px 6px 9px 5px / 6px 9px 5px 8px;
+  margin: 0;
+}
+
+.register-submit {
+  width: 100%;
+  margin-top: 6px;
+}
+.register-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.register-login-link {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--gray-700);
+  text-align: center;
+  margin-top: 22px;
+}
+.register-login-link a {
+  color: var(--text-strong);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.register-login-link a:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .register-statue {
+    right: 8px;
+    width: 110px;
+    opacity: 0.3;
+    top: -30px;
+  }
+  .register-title {
+    font-size: 38px;
+  }
+}

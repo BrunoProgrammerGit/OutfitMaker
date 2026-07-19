@@ -1,0 +1,161 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 80px 32px 120px;
+}
+
+/* ------------------------------------------------------------
+   Hero — regla de tercios asimétrica
+   ------------------------------------------------------------ */
+.home-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: center;
+}
+
+.home-hero-window {
+  grid-column: 1;
+  max-width: 560px;
+  z-index: 2;
+}
+
+/* Arte troquelado que rompe el marco a la derecha */
+.home-hero-statue {
+  grid-column: 2;
+  justify-self: center;
+  position: relative;
+  z-index: 1;
+  width: 300px;
+  margin-left: -60px;
+  filter: drop-shadow(6px 10px 14px rgba(0, 0, 0, 0.55));
+  will-change: transform;
+}
+.home-hero-statue svg {
+  width: 100%;
+  height: auto;
+}
+
+.home-title {
+  font-size: 68px;
+  color: var(--text-strong);
+  margin: 14px 0 6px;
+}
+
+.home-subtitle {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--gray-700);
+  max-width: 380px;
+  margin-top: 10px;
+}
+
+.home-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.home-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+/* ------------------------------------------------------------
+   Features
+   ------------------------------------------------------------ */
+.home-features-section {
+  position: relative;
+}
+
+.home-features-statue {
+  position: absolute;
+  top: -110px;
+  left: -40px;
+  width: 200px;
+  z-index: 0;
+  opacity: 0.9;
+  filter: drop-shadow(6px 10px 14px rgba(0, 0, 0, 0.5));
+  will-change: transform;
+}
+.home-features-statue svg {
+  width: 100%;
+  height: auto;
+}
+
+.home-features {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+}
+
+.home-feature-index {
+  font-size: 46px;
+  color: var(--text-strong);
+  line-height: 0.8;
+}
+
+.home-feature-title {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-strong);
+  letter-spacing: -0.2px;
+  margin: 12px 0 8px;
+}
+
+.home-feature-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--gray-700);
+}
+
+/* ------------------------------------------------------------
+   Responsive — columna limpia, estatuas de fondo
+   ------------------------------------------------------------ */
+@media (max-width: 860px) {
+  .home {
+    gap: 90px;
+    padding: 56px 20px 90px;
+  }
+
+  .home-hero {
+    grid-template-columns: 1fr;
+  }
+  .home-hero-window {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 100%;
+  }
+  .home-hero-statue {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+    width: 150px;
+    margin: 0 -8px 0 0;
+    align-self: start;
+    opacity: 0.25;
+    z-index: 0;
+  }
+
+  .home-title {
+    font-size: 52px;
+  }
+
+  .home-features {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .home-features-statue {
+    display: none;
+  }
+}

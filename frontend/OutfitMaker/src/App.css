@@ -4,33 +4,102 @@
   min-height: 100svh;
 }
 
-.app-header {
-  display: flex;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
+/* ------------------------------------------------------------
+   CAPA 2 — Tiras de papel crema con bordes rasgados irregulares
+   ------------------------------------------------------------ */
+.paper-strip {
   position: sticky;
-  top: 0;
-  z-index: 10;
+  z-index: 2;
+  background: var(--paper);
+  overflow: hidden;
+  box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.7);
 }
 
-.app-header h1 {
-  font-size: 22px;
-  margin: 0;
-  letter-spacing: -0.4px;
-  color: var(--accent);
+.paper-strip--top {
+  top: 0;
+  padding: 14px 20px 20px;
+  /* borde inferior rasgado */
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='90' preserveAspectRatio='none'%3E%3Cpath d='M0 0 H1200 V64 Q1180 74 1150 66 T1090 68 T1020 62 T950 70 T880 64 T810 72 T740 62 T660 70 T590 64 T510 72 T440 62 T360 70 T280 64 T200 72 T120 62 T50 70 T0 66 Z' fill='%23000'/%3E%3C/svg%3E") no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='90' preserveAspectRatio='none'%3E%3Cpath d='M0 0 H1200 V64 Q1180 74 1150 66 T1090 68 T1020 62 T950 70 T880 64 T810 72 T740 62 T660 70 T590 64 T510 72 T440 62 T360 70 T280 64 T200 72 T120 62 T50 70 T0 66 Z' fill='%23000'/%3E%3C/svg%3E") no-repeat;
+  mask-size: 100% 100%;
+}
+
+.paper-strip--bottom {
+  bottom: 0;
+  margin-top: auto;
+  padding: 22px 20px 16px;
+  /* borde superior rasgado */
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='90' preserveAspectRatio='none'%3E%3Cpath d='M0 90 H1200 V26 Q1180 16 1150 24 T1090 22 T1020 28 T950 20 T880 26 T810 18 T740 28 T660 20 T590 26 T510 18 T440 28 T360 20 T280 26 T200 18 T120 28 T50 20 T0 24 Z' fill='%23000'/%3E%3C/svg%3E") no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='90' preserveAspectRatio='none'%3E%3Cpath d='M0 90 H1200 V26 Q1180 16 1150 24 T1090 22 T1020 28 T950 20 T880 26 T810 18 T740 28 T660 20 T590 26 T510 18 T440 28 T360 20 T280 26 T200 18 T120 28 T50 20 T0 24 Z' fill='%23000'/%3E%3C/svg%3E") no-repeat;
+  mask-size: 100% 100%;
+}
+
+/* Texto simulado de periódico antiguo, desenfocado */
+.paper-strip-news {
+  position: absolute;
+  inset: 0;
+  padding: 6px 16px;
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--gray-500);
+  opacity: 0.32;
+  filter: blur(2px);
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-word;
+  pointer-events: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.app-header-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.app-logo {
+  font-size: 40px;
+  color: var(--text-strong);
+  text-decoration: none;
+  line-height: 0.9;
+}
+.app-logo:hover {
+  opacity: 0.75;
 }
 
 .app-main {
+  position: relative;
+  z-index: 1;
   flex: 1 1 auto;
   display: flex;
-  padding: 20px;
+  flex-direction: column;
 }
 
-.container {
-  flex: 1 1 auto;
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
+.app-footer-text {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--gray-500);
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .app-logo {
+    font-size: 32px;
+  }
+  .paper-strip-news {
+    filter: blur(1.5px);
+  }
 }

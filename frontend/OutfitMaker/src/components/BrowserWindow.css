@@ -1,0 +1,107 @@
+/* ============================================================
+   Hand-Drawn Browser Window
+   Ventana crema con trazo de tinta irregular y barra superior.
+   ============================================================ */
+
+.hw-window {
+  position: relative;
+  background: var(--paper);
+  color: var(--text-strong);
+  /* Border-radius asimétrico para trazo a mano alzada */
+  border-radius: 14px 10px 16px 8px / 10px 16px 8px 14px;
+  border: var(--stroke);
+  /* Doble trazo sutil para sensación de tinta */
+  box-shadow:
+    3px 4px 0 -1px rgba(18, 18, 18, 0.9),
+    0 12px 30px -12px rgba(0, 0, 0, 0.6);
+}
+
+.hw-window--overflow {
+  overflow: visible;
+}
+
+.hw-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  border-bottom: var(--stroke-thin);
+  background: var(--paper-shade);
+  border-radius: 12px 8px 0 0 / 9px 12px 0 0;
+}
+
+.hw-window-dots {
+  display: flex;
+  gap: 7px;
+  flex: 0 0 auto;
+}
+
+.hw-dot {
+  width: 13px;
+  height: 13px;
+  border: 2px solid #121212;
+  background: transparent;
+  /* círculos imperfectos hechos a mano */
+  border-radius: 48% 52% 55% 45% / 50% 47% 53% 50%;
+}
+.hw-dot:nth-child(2) {
+  border-radius: 52% 48% 47% 53% / 46% 54% 46% 54%;
+}
+.hw-dot:nth-child(3) {
+  border-radius: 50% 50% 48% 52% / 55% 45% 52% 48%;
+}
+
+.hw-window-title {
+  flex: 1 1 auto;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  color: var(--gray-500);
+  text-transform: lowercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hw-window-nav {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.hw-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 20px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: #121212;
+  border: 2px solid #121212;
+  /* cuadrados asimétricos */
+  border-radius: 5px 3px 6px 4px / 4px 6px 3px 5px;
+  background: transparent;
+}
+.hw-nav-btn:last-child {
+  border-radius: 4px 6px 3px 5px / 5px 3px 6px 4px;
+}
+
+.hw-window-body {
+  padding: 28px 26px;
+}
+
+@media (max-width: 768px) {
+  .hw-window {
+    border-width: 2px;
+    box-shadow:
+      2px 3px 0 -1px rgba(18, 18, 18, 0.85),
+      0 8px 20px -12px rgba(0, 0, 0, 0.5);
+  }
+  .hw-window-body {
+    padding: 22px 18px;
+  }
+}
