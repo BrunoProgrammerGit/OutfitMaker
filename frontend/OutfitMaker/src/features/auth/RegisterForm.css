@@ -111,6 +111,34 @@
   cursor: not-allowed;
 }
 
+.register-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 20px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--gray-700);
+}
+.register-divider::before,
+.register-divider::after {
+  content: '';
+  flex: 1;
+  border-top: var(--stroke-thin);
+}
+
+.google-auth {
+  display: flex;
+  justify-content: center;
+}
+.google-auth[aria-busy='true'] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .register-login-link {
   font-family: var(--sans);
   font-size: 14px;

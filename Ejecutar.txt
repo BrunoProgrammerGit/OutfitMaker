@@ -1,0 +1,8 @@
+# Backend
+cd backend/backend && npm run start:dev
+
+# Frontend
+cd frontend/OutfitMaker && npm run dev
+
+# Tests
+cd frontend/OutfitMaker && npx vitest run

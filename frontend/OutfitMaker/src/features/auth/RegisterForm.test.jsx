@@ -9,6 +9,12 @@ vi.mock('../../lib/api', () => ({
   default: { post: vi.fn() },
 }))
 
+// GoogleLogin exige estar dentro de GoogleOAuthProvider; para estos tests
+// basta un placeholder (GoogleAuthButton tiene su propio archivo de tests).
+vi.mock('@react-oauth/google', () => ({
+  GoogleLogin: () => <button type="button">Continuar con Google</button>,
+}))
+
 import api from '../../lib/api'
 
 function renderForm() {

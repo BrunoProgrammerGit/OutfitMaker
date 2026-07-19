@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import api from '../../lib/api'
 import BrowserWindow from '../../components/BrowserWindow'
 import StatueBust from '../../components/StatueBust'
+import GoogleAuthButton from './GoogleAuthButton'
 import './RegisterForm.css'
 
 function validate(fields) {
@@ -26,6 +27,7 @@ export default function RegisterForm() {
   const [fields, setFields] = useState({ email: '', password: '', confirmPassword: '' })
   const [touched, setTouched] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const [googleError, setGoogleError] = useState('')
 
   const errors = validate(fields)
   const visibleErrors = submitted
@@ -119,6 +121,18 @@ export default function RegisterForm() {
             {mutation.isPending ? 'Registrando…' : 'Crear cuenta'}
           </button>
         </form>
+
+        <div className="register-divider" role="separator">
+          <span>o</span>
+        </div>
+
+        {googleError && (
+          <p className="register-error-global" role="alert">
+            {googleError}
+          </p>
+        )}
+
+        <GoogleAuthButton onError={setGoogleError} />
 
         <p className="register-login-link">
           ¿Ya tienes cuenta?{' '}
