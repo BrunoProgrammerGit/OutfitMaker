@@ -8,6 +8,14 @@
 .preview-image { max-height: 180px; object-fit: cover; border-radius: 12px; }
 .closet-status { color: var(--green-700); font-weight: 600; }
 .closet-error { color: #b42318; font-weight: 600; }
+.processing-box { margin-top: 8px; padding: 10px; border-radius: 10px; background: rgba(0,0,0,0.03); display: flex; flex-direction: column; gap: 8px; }
+.processing-label { font-weight: 600; color: var(--gray-800); }
+.processing-stage { font-size: 0.9rem; color: var(--gray-600); }
+.progress-bar { width: 100%; height: 12px; background: var(--gray-200); border-radius: 999px; overflow: hidden; position: relative; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg,var(--accent),#6ee7b7); width: 0%; transition: width 300ms linear; }
+.progress-bar.indeterminate { position: relative; background: linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02)); }
+.progress-bar.indeterminate .progress-bar-fill { width: 40%; background: linear-gradient(90deg,var(--accent),#6ee7b7); animation: indeterminate 1s ease-in-out infinite; transform: translateX(-120%); }
+@keyframes indeterminate { 0% { transform: translateX(-120%); } 50% { transform: translateX(0%); } 100% { transform: translateX(120%); } }
 .closet-grid-section { border: 1px solid var(--gray-300); border-radius: 20px; padding: 16px; background: rgba(255,255,255,0.7); }
 .closet-grid-scroll { overflow: auto; }
 .closet-card { display: grid; grid-template-columns: 180px 1fr; gap: 16px; padding: 12px; margin-bottom: 12px; border: 1px solid var(--gray-300); border-radius: 16px; background: white; } 

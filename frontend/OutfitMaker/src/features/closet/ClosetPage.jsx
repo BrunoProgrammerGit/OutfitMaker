@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import api from '../../lib/api'
@@ -53,6 +53,10 @@ export default function ClosetPage() {
   const [status, setStatus] = useState('')
   const [error, setError] = useState('')
   const [previewUrl, setPreviewUrl] = useState('')
+  const [processing, setProcessing] = useState(false)
+  const [progress, setProgress] = useState(null)
+  const workerRef = useRef(null)
+  const previewObjectUrlRef = useRef(null)
 
   const { data: garments = [], isLoading } = useQuery({
     queryKey: ['garments'],
@@ -123,10 +127,112 @@ export default function ClosetPage() {
       return
     }
     setError('')
-    setStatus('Imagen válida. Puedes guardar la prenda.')
-    setForm((prev) => ({ ...prev, image: file }))
-    setPreviewUrl(URL.createObjectURL(file))
+    setStatus('Imagen válida. Procesando recorte de fondo...')
+
+    // Process in worker with timeout and fallback
+    try {
+      setProcessing(true)
+      setProgress({ stage: 'start', current: 0, total: 0 })
+      const processedFile = await processImageWithWorker(file, (p) => setProgress(p))
+      if (processedFile) {
+        setForm((prev) => ({ ...prev, image: processedFile }))
+        const url = URL.createObjectURL(processedFile)
+        if (previewObjectUrlRef.current) {
+          try { URL.revokeObjectURL(previewObjectUrlRef.current) } catch (e) {}
+        }
+        previewObjectUrlRef.current = url
+        setPreviewUrl(url)
+        setStatus('Imagen procesada. Puedes guardar la prenda.')
+      } else {
+        // fallback: use original
+        setForm((prev) => ({ ...prev, image: file }))
+        const url = URL.createObjectURL(file)
+        if (previewObjectUrlRef.current) {
+          try { URL.revokeObjectURL(previewObjectUrlRef.current) } catch (e) {}
+        }
+        previewObjectUrlRef.current = url
+        setPreviewUrl(url)
+        setStatus('No se pudo recortar el fondo — la imagen original será subida.')
+      }
+    } catch (e) {
+      setForm((prev) => ({ ...prev, image: file }))
+      setPreviewUrl(URL.createObjectURL(file))
+      setStatus('Error procesando la imagen; se subirá la original.')
+    } finally {
+      setProcessing(false)
+      setProgress(null)
+      event.target.value = ''
+    }
   }
+
+  async function processImageWithWorker(file, onProgress) {
+    return new Promise((resolve) => {
+      // Create module worker
+      const worker = new Worker(new URL('./backgroundRemover.worker.js', import.meta.url), { type: 'module' })
+      workerRef.current = worker
+
+      const id = Date.now() + Math.random()
+      let finished = false
+
+      const cleanup = () => {
+        try { worker.terminate() } catch (e) {}
+        if (workerRef.current === worker) workerRef.current = null
+      }
+
+      const timeout = setTimeout(() => {
+        if (finished) return
+        finished = true
+        cleanup()
+        onProgress && onProgress({ stage: 'timeout', current: 0, total: 0 })
+        resolve(null)
+      }, 15000)
+
+      worker.onmessage = async (ev) => {
+        const msg = ev.data
+        if (!msg) return
+        if (msg.type === 'progress') {
+          onProgress && onProgress({ stage: msg.stage || msg.stage, current: msg.current || 0, total: msg.total || 0 })
+          return
+        }
+        if (msg.type === 'done') {
+          if (finished) return
+          finished = true
+          clearTimeout(timeout)
+          // Convert blob to File
+          const blob = msg.blob
+          const ext = blob.type === 'image/png' ? '.png' : '.jpg'
+          const name = file.name ? file.name.replace(/\.[^/.]+$/, '') + '-nobg' + ext : 'image-nobg.png'
+          const processed = new File([blob], name, { type: blob.type })
+          cleanup()
+          resolve(processed)
+          return
+        }
+        if (msg.type === 'error') {
+          if (finished) return
+          finished = true
+          clearTimeout(timeout)
+          cleanup()
+          resolve(null)
+          return
+        }
+      }
+
+      worker.postMessage({ type: 'process', id, file })
+    })
+  }
+
+  useEffect(() => {
+    return () => {
+      if (previewObjectUrlRef.current) {
+        try { URL.revokeObjectURL(previewObjectUrlRef.current) } catch (e) {}
+        previewObjectUrlRef.current = null
+      }
+      if (workerRef.current) {
+        try { workerRef.current.terminate() } catch (e) {}
+        workerRef.current = null
+      }
+    }
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -171,6 +277,23 @@ export default function ClosetPage() {
           <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleFileChange} />
           <button type="submit" disabled={isBusy}>{editingId ? 'Guardar cambios' : 'Agregar prenda'}</button>
           {previewUrl ? <img src={previewUrl} alt="Vista previa" className="preview-image" /> : null}
+          {processing ? (
+            <div className="processing-box">
+              <div className="processing-label">Procesando imagen… Esto puede tardar varios segundos.</div>
+              {progress ? (
+                progress.total > 0 ? (
+                  <div className="progress-bar" role="progressbar" aria-valuenow={Math.round((progress.current / Math.max(1, progress.total)) * 100)} aria-valuemin="0" aria-valuemax="100">
+                    <div className="progress-bar-fill" style={{ width: `${Math.round((progress.current / Math.max(1, progress.total)) * 100)}%` }} />
+                  </div>
+                ) : (
+                  <div className="progress-bar indeterminate"><div className="progress-bar-fill" /></div>
+                )
+              ) : (
+                <div className="progress-bar indeterminate"><div className="progress-bar-fill" /></div>
+              )}
+              <div className="processing-stage">{progress ? `${progress.stage || ''} ${progress.current || ''}/${progress.total || ''}` : ''}</div>
+            </div>
+          ) : null}
         </form>
       </section>
 
