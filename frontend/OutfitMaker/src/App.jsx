@@ -1,6 +1,7 @@
 import { Routes, Route, Link } from 'react-router-dom'
 import Home from './pages/Home'
 import RegisterForm from './features/auth/RegisterForm'
+import ClosetPage from './features/closet/ClosetPage'
 import './App.css'
 
 const NEWSPAPER_TEXT =
@@ -27,6 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegisterForm />} />
+          <Route path="/closet" element={<ClosetPage />} />
         </Routes>
       </main>
 

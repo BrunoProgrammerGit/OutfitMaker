@@ -27,8 +27,8 @@ export default function Home() {
             <Link to="/register" className="btn btn-primary">
               Empezar gratis
             </Link>
-            <Link to="/login" className="btn btn-secondary">
-              Iniciar sesión
+            <Link to="/closet" className="btn btn-secondary">
+              Mi clóset
             </Link>
           </div>
           <div className="home-tags">

@@ -1,0 +1,18 @@
+.closet-page { display: flex; flex-direction: column; gap: 24px; padding: 24px; }
+.closet-toolbar { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px; align-items: start; }
+.closet-title { font-size: 2.6rem; margin: 0 0 8px; }
+.closet-subtitle { color: var(--gray-600); max-width: 540px; }
+.closet-form { display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid var(--gray-300); border-radius: 16px; background: rgba(255,255,255,0.8); }
+.closet-form input, .closet-form textarea, .closet-form button { font: inherit; padding: 10px; border-radius: 10px; border: 1px solid var(--gray-300); }
+.closet-form button { background: var(--accent); color: white; cursor: pointer; }
+.preview-image { max-height: 180px; object-fit: cover; border-radius: 12px; }
+.closet-status { color: var(--green-700); font-weight: 600; }
+.closet-error { color: #b42318; font-weight: 600; }
+.closet-grid-section { border: 1px solid var(--gray-300); border-radius: 20px; padding: 16px; background: rgba(255,255,255,0.7); }
+.closet-grid-scroll { overflow: auto; }
+.closet-card { display: grid; grid-template-columns: 180px 1fr; gap: 16px; padding: 12px; margin-bottom: 12px; border: 1px solid var(--gray-300); border-radius: 16px; background: white; } 
+.closet-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; }
+.closet-card-content { display: flex; flex-direction: column; gap: 6px; }
+.closet-card-actions { display: flex; gap: 8px; margin-top: auto; }
+.closet-card-actions button { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--gray-300); cursor: pointer; }
+@media (max-width: 900px) { .closet-toolbar { grid-template-columns: 1fr; } .closet-card { grid-template-columns: 1fr; } }
