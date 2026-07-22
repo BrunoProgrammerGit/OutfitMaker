@@ -4,6 +4,7 @@ import { mkdir, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { Repository } from 'typeorm'
 import { Garment } from './garment.entity'
+import { GarmentCategory } from './garment-category.enum'
 import { v4 as uuidv4 } from 'uuid'
 import * as cloudinary from 'cloudinary'
 
@@ -24,7 +25,7 @@ export class GarmentsService {
     return this.garmentRepository.find({ order: { createdAt: 'DESC' } })
   }
 
-  async create(payload: { name?: string; category?: string; description?: string; image?: Express.Multer.File }) {
+  async create(payload: { name?: string; category?: GarmentCategory; description?: string; image?: Express.Multer.File }) {
     const garment = this.garmentRepository.create({
       name: payload.name ?? 'Nueva prenda',
       category: payload.category,
@@ -38,7 +39,7 @@ export class GarmentsService {
     return this.garmentRepository.save(garment)
   }
 
-  async update(id: number, payload: { name?: string; category?: string; description?: string; image?: Express.Multer.File }) {
+  async update(id: number, payload: { name?: string; category?: GarmentCategory; description?: string; image?: Express.Multer.File }) {
     const garment = await this.garmentRepository.findOneBy({ id })
     if (!garment) throw new NotFoundException('Prenda no encontrada')
 
@@ -51,6 +52,25 @@ export class GarmentsService {
     }
 
     return this.garmentRepository.save(garment)
+  }
+
+  async checkPlannerEntryReferences(id: number) {
+    try {
+      const result: Array<{ count: number }> = await this.garmentRepository.query(
+        'SELECT COUNT(*) as count FROM planner_entry WHERE garment_id = ? LIMIT 1',
+        [id],
+      )
+      return {
+        referenced: (result[0]?.count ?? 0) > 0,
+      }
+    } catch (error: any) {
+      const message = String(error?.message || error)
+      if (message.includes('planner_entry') && message.match(/no such table|cannot find|does not exist/i)) {
+        // TODO: habilitar la verificación cuando la tabla planner_entry esté creada en Issue #13.
+        return { referenced: false }
+      }
+      throw error
+    }
   }
 
   private async storeImage(file: Express.Multer.File): Promise<string> {

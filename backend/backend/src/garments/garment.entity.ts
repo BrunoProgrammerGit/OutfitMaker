@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+import { GarmentCategory } from '@shared/garment-category'
 
 @Entity('garments')
 export class Garment {
@@ -15,7 +16,7 @@ export class Garment {
   name: string
 
   @Column({ nullable: true })
-  category?: string
+  category?: GarmentCategory
 
   @Column({ nullable: true })
   description?: string

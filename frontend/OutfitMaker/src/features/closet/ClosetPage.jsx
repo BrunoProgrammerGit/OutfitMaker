@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import api from '../../lib/api'
 import { validateGarmentImage } from './imageValidation'
+import { garmentCategories } from './garmentCategories'
 import './ClosetPage.css'
 
 const defaultForm = {
@@ -23,9 +24,7 @@ async function createGarment(formData) {
   payload.append('category', formData.category)
   payload.append('description', formData.description)
   if (formData.image) payload.append('image', formData.image)
-  const { data } = await api.post('/garments', payload, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  const { data } = await api.post('/garments', payload)
   return data
 }
 
@@ -35,9 +34,7 @@ async function updateGarment(id, formData) {
   payload.append('category', formData.category)
   payload.append('description', formData.description)
   if (formData.image) payload.append('image', formData.image)
-  const { data } = await api.patch(`/garments/${id}`, payload, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  const { data } = await api.patch(`/garments/${id}`, payload)
   return data
 }
 
@@ -256,8 +253,27 @@ export default function ClosetPage() {
     setError('')
   }
 
-  const handleDelete = (id) => {
-    deleteMutation.mutate(id)
+  const handleCancelEdit = () => {
+    setEditingId(null)
+    setForm(defaultForm)
+    setPreviewUrl('')
+    setStatus('Edición cancelada.')
+    setError('')
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      const { data } = await api.get(`/garments/${id}/reference-check`)
+      const referenced = data?.referenced
+      const message = referenced
+        ? 'Esta prenda está referenciada en un planner_entry. ¿Deseas eliminarla de todos modos?'
+        : '¿Confirma que desea eliminar esta prenda?'
+      if (!window.confirm(message)) return
+      deleteMutation.mutate(id)
+    } catch (err) {
+      if (!window.confirm('No fue posible comprobar referencias. ¿Deseas eliminar la prenda de todos modos?')) return
+      deleteMutation.mutate(id)
+    }
   }
 
   const isBusy = createMutation.isPending || updateMutation.isPending || deleteMutation.isPending
@@ -272,10 +288,28 @@ export default function ClosetPage() {
         </div>
         <form className="closet-form" onSubmit={handleSubmit}>
           <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Nombre" required />
-          <input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="Categoría" />
+          <select
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            required
+          >
+            <option value="" disabled>Selecciona categoría</option>
+            {garmentCategories.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
           <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Descripción" />
           <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleFileChange} />
-          <button type="submit" disabled={isBusy}>{editingId ? 'Guardar cambios' : 'Agregar prenda'}</button>
+          <div className="closet-form-actions">
+            <button type="submit" disabled={isBusy}>{editingId ? 'Guardar cambios' : 'Agregar prenda'}</button>
+            {editingId ? (
+              <button type="button" className="cancel-button" onClick={handleCancelEdit} disabled={isBusy}>
+                Cancelar
+              </button>
+            ) : null}
+          </div>
           {previewUrl ? <img src={previewUrl} alt="Vista previa" className="preview-image" /> : null}
           {processing ? (
             <div className="processing-box">

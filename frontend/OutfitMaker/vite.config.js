@@ -2,19 +2,26 @@ import { defineConfig } from 'vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
 import { VitePWA } from 'vite-plugin-pwa'
+import { join } from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  esbuild: {
-    jsx: 'automatic',
-  },
   server: {
+    fs: {
+      allow: [
+        process.cwd(),
+        join(process.cwd(), '..', '..'),
+      ],
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },
+  },
+  esbuild: {
+    jsx: 'automatic',
   },
   test: {
     environment: 'jsdom',
