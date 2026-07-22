@@ -50,6 +50,11 @@ export class GarmentsController {
     })
   }
 
+  @Patch(':id/availability')
+  setAvailability(@Param('id') id: string, @Body() body: { isAvailable: boolean }) {
+    return this.garmentsService.setAvailability(+id, body.isAvailable)
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.garmentsService.remove(+id)

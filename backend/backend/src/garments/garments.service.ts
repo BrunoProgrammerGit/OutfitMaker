@@ -25,6 +25,11 @@ export class GarmentsService {
     return this.garmentRepository.find({ order: { createdAt: 'DESC' } })
   }
 
+  // Reusable filter for available garments — use this from recommendation engine
+  async findAvailable(): Promise<Garment[]> {
+    return this.garmentRepository.find({ where: { isAvailable: true }, order: { createdAt: 'DESC' } })
+  }
+
   async create(payload: { name?: string; category?: GarmentCategory; description?: string; image?: Express.Multer.File }) {
     const garment = this.garmentRepository.create({
       name: payload.name ?? 'Nueva prenda',
@@ -71,6 +76,13 @@ export class GarmentsService {
       }
       throw error
     }
+  }
+
+  async setAvailability(id: number, isAvailable: boolean) {
+    const garment = await this.garmentRepository.findOneBy({ id })
+    if (!garment) throw new NotFoundException('Prenda no encontrada')
+    garment.isAvailable = isAvailable
+    return this.garmentRepository.save(garment)
   }
 
   private async storeImage(file: Express.Multer.File): Promise<string> {

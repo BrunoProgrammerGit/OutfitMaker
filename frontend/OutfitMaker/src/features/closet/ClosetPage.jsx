@@ -43,6 +43,11 @@ async function deleteGarment(id) {
   return data
 }
 
+async function setGarmentAvailability(id, isAvailable) {
+  const { data } = await api.patch(`/garments/${id}/availability`, { isAvailable })
+  return data
+}
+
 export default function ClosetPage() {
   const queryClient = useQueryClient()
   const [form, setForm] = useState(defaultForm)
@@ -110,6 +115,17 @@ export default function ClosetPage() {
     onError: (err) => {
       setError(err?.response?.data?.message || 'No se pudo borrar la prenda.')
       setStatus('')
+    },
+  })
+
+  const availabilityMutation = useMutation({
+    mutationFn: ({ id, isAvailable }) => setGarmentAvailability(id, isAvailable),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['garments'] })
+      setError('')
+    },
+    onError: (err) => {
+      setError(err?.response?.data?.message || 'No se pudo actualizar la disponibilidad.')
     },
   })
 
@@ -368,6 +384,14 @@ export default function ClosetPage() {
                       <div className="closet-card-actions">
                         <button type="button" onClick={() => handleEdit(garment)}>Editar</button>
                         <button type="button" onClick={() => handleDelete(garment.id)}>Borrar</button>
+                        <label className="availability-toggle">
+                          <input
+                            type="checkbox"
+                            checked={garment.isAvailable !== false}
+                            onChange={() => availabilityMutation.mutate({ id: garment.id, isAvailable: !garment.isAvailable })}
+                          />
+                          <span>{garment.isAvailable === false ? 'No disponible' : 'Disponible'}</span>
+                        </label>
                       </div>
                     </div>
                   </div>

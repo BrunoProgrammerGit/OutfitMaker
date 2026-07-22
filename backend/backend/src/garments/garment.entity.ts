@@ -24,6 +24,8 @@ export class Garment {
   @Column({ nullable: true })
   imageUrl?: string
 
+  @Column({ default: true })
+  isAvailable: boolean
   @CreateDateColumn()
   createdAt: Date
 
